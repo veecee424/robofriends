@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './Card.css';
-import App from './App'
+import App from '../src/containers/App'
 import './index.css'
 import reportWebVitals from './reportWebVitals';
 
