@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import CardList from '../components/CardList';
 import Searchbox from '../components/Searchbox'
+import { connect } from 'react-redux'
 import ErrorBoundary from '../components/Error';
 import Scroll from '../components/Scroll'
 import './App.css'
+import { setSearchField } from '../actions'
 
-function App () {
+const mapStateToProps = (state) => {
+    return {
+        /**
+         * Return new state from the reducer function
+         */
+        searchField: state.searchField
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        /**
+         * Dispatch action/event which triggers state manipulation
+         */
+        onSearchChange: (event) => {
+            dispatch(setSearchField(event.target.value))
+        }
+    }
+}
+
+function App (props) {
 
     const [robots, setRobots] = useState([])
-    const [searchfield, setSearchfield] = useState('')
-
-    const onSearchChange = (event) => {
-        /**
-         * Pick the value of input and set searchfield to its value
-         */
-        setSearchfield(event.target.value)
-    }
+    const { searchField, onSearchChange } = props
 
     /**
      * If component was mounted (inserted into the render tree) successfully, fetch users
@@ -31,7 +46,7 @@ function App () {
      * Filter robots
      */
     const filteredRobots = robots.filter(robot => {
-        return robot.name.toLowerCase().includes(searchfield.toLowerCase())
+        return robot.name.toLowerCase().includes(searchField.toLowerCase())
     })
 
     /**
@@ -45,13 +60,13 @@ function App () {
         <div className='tc'>
             <h1 className='f1'>Robofriends</h1>
             <Searchbox searchChange={onSearchChange}/>
-            <div style={{ overflow: 'scroll', border: '5px solid black', height: '800px'}}>
+            <Scroll>
                 <ErrorBoundary>
                     <CardList robots={filteredRobots}/>
                 </ErrorBoundary>
-            </div>
+            </Scroll>
         </div>
     )
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
