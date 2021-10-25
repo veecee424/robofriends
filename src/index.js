@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import App from '../src/containers/App'
 import './index.css'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createLogger } from 'redux-logger'
+import { createStore, applyMiddleware } from 'redux'
 import { searchRobots } from './reducers'
 import reportWebVitals from './reportWebVitals';
 
-const store = createStore(searchRobots)
+const Logger = createLogger();
+const store = createStore(searchRobots, applyMiddleware(Logger))
 
 ReactDOM.render(
   <React.StrictMode>
